@@ -3,31 +3,54 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import SwiftSyntaxMacros
 
-/// Implementation of the `stringify` macro, which takes an expression
-/// of any type and produces a tuple containing the value of that expression
-/// and the source code that produced the value. For example
-///
-///     #stringify(x + y)
-///
-///  will expand to
-///
-///     (x + y, "x + y")
-public struct StringifyMacro: ExpressionMacro {
-    public static func expansion(
-        of node: some FreestandingMacroExpansionSyntax,
-        in context: some MacroExpansionContext
-    ) -> ExprSyntax {
-        guard let argument = node.argumentList.first?.expression else {
-            fatalError("compiler bug: the macro does not have any arguments")
-        }
 
-        return "(\(argument), \(literal: argument.description))"
-    }
+
+public struct ToStringMacro: ExpressionMacro
+{
+	public enum ToStringError: Error, CustomStringConvertible
+	{
+		case unsupportedExpression
+		
+		public var description: String
+		{
+			switch self
+			{
+			case .unsupportedExpression:
+				return "Unsupported expression."
+			}
+		}
+	}
+	
+	
+	
+	public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax
+	{
+		let argument = node.argumentList.first!.expression
+		
+		if let declExpr = argument.as(DeclReferenceExprSyntax.self)
+		{
+			return "\"\(declExpr.baseName)\""
+		}
+		else if let memberExpr = argument.as(MemberAccessExprSyntax.self)
+		{
+			return "\"\(memberExpr.declName.baseName)\""
+		}
+		else if let keyPathExpr = argument.as(KeyPathExprSyntax.self),
+						let compExpr = keyPathExpr.components.last?.component.as(KeyPathPropertyComponentSyntax.self)
+		{
+			return "\"\(compExpr.declName.baseName)\""
+		}
+		
+		throw ToStringError.unsupportedExpression
+	}
 }
 
+
+
 @main
-struct MacrosForSwiftPlugin: CompilerPlugin {
-    let providingMacros: [Macro.Type] = [
-        StringifyMacro.self,
-    ]
+struct MacrosForSwiftPlugin: CompilerPlugin
+{
+	let providingMacros: [Macro.Type] = [
+		ToStringMacro.self,
+	]
 }

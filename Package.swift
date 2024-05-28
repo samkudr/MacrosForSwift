@@ -13,10 +13,6 @@ let package = Package(
             name: "MacrosForSwift",
             targets: ["MacrosForSwift"]
         ),
-        .executable(
-            name: "MacrosForSwiftClient",
-            targets: ["MacrosForSwiftClient"]
-        ),
     ],
     dependencies: [
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
@@ -35,9 +31,6 @@ let package = Package(
 
         // Library that exposes a macro as part of its API, which is used in client programs.
         .target(name: "MacrosForSwift", dependencies: ["MacrosForSwiftMacros"]),
-
-        // A client of the library, which is able to use the macro in its own code.
-        .executableTarget(name: "MacrosForSwiftClient", dependencies: ["MacrosForSwift"]),
 
         // A test target used to develop the macro implementation.
         .testTarget(

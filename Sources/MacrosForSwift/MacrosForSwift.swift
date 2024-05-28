@@ -1,11 +1,19 @@
 // The Swift Programming Language
 // https://docs.swift.org/swift-book
 
-/// A macro that produces both a value and a string containing the
-/// source code that generated the value. For example,
+
+
+/// Converts expression to a string literal.
 ///
-///     #stringify(x + y)
+/// - parameter expression: Expression or key path.
 ///
-/// produces a tuple `(x + y, "x + y")`.
+/// Examples:
+///
+///		#toString(variable) -> "variable"
+///		#toString(TypeName) -> "TypeName"
+///		#toString(TypeName.staticProperty) -> "staticProperty"
+///		#toString(instance.property) -> "property"
+///		#toString(\TypeName.property) -> "property"
+///		#toString(\TypeName.property.subProperty) -> "subProperty"
 @freestanding(expression)
-public macro stringify<T>(_ value: T) -> (T, String) = #externalMacro(module: "MacrosForSwiftMacros", type: "StringifyMacro")
+public macro toString(_ expression: Any) -> String = #externalMacro(module: "MacrosForSwiftMacros", type: "ToStringMacro")
