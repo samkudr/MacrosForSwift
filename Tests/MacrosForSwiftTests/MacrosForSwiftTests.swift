@@ -40,7 +40,7 @@ final class MacrosForSwiftTests: XCTestCase
 		)
 		assertMacroExpansion(
 			"""
-			#toString(TypeName)
+			#toString(TypeName.self)
 			""",
 			expandedSource: """
 			"TypeName"

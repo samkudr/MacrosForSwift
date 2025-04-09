@@ -10,7 +10,7 @@
 /// Examples:
 ///
 ///		#toString(variable) -> "variable"
-///		#toString(TypeName) -> "TypeName"
+///		#toString(TypeName.self) -> "TypeName"
 ///		#toString(TypeName.staticProperty) -> "staticProperty"
 ///		#toString(instance.property) -> "property"
 ///		#toString(\TypeName.property) -> "property"

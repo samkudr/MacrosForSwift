@@ -33,6 +33,12 @@ public struct ToStringMacro: ExpressionMacro
 		}
 		else if let memberExpr = argument.as(MemberAccessExprSyntax.self)
 		{
+			if memberExpr.declName.baseName.text == "self",
+				 let baseExpr = memberExpr.base?.as(DeclReferenceExprSyntax.self)
+			{
+				return "\"\(baseExpr.baseName)\""
+			}
+			
 			return "\"\(memberExpr.declName.baseName)\""
 		}
 		else if let keyPathExpr = argument.as(KeyPathExprSyntax.self),
