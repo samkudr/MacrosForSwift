@@ -108,6 +108,18 @@ final class MacrosForSwiftTests: XCTestCase
 			],
 			macros: testMacros
 		)
+		assertMacroExpansion(
+			"""
+			#toString(nil)
+			""",
+			expandedSource: """
+			#toString(nil)
+			""",
+			diagnostics: [
+				.init(message: ToStringMacro.ToStringError.unsupportedExpression.description, line: 1, column: 1),
+			],
+			macros: testMacros
+		)
 		#else
 		throw XCTSkip("macros are only supported when running tests for the host platform")
 		#endif

@@ -16,4 +16,4 @@
 ///		#toString(\TypeName.property) -> "property"
 ///		#toString(\TypeName.property.subProperty) -> "subProperty"
 @freestanding(expression)
-public macro toString(_ expression: Any) -> String = #externalMacro(module: "MacrosForSwiftMacros", type: "ToStringMacro")
+public macro toString(_ expression: Any?) -> String = #externalMacro(module: "MacrosForSwiftMacros", type: "ToStringMacro")
