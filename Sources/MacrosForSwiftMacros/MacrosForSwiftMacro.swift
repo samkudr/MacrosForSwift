@@ -25,7 +25,7 @@ public struct ToStringMacro: ExpressionMacro
 	
 	public static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> ExprSyntax
 	{
-		let argument = node.argumentList.first!.expression
+		let argument = node.arguments.first!.expression
 		
 		if let declExpr = argument.as(DeclReferenceExprSyntax.self)
 		{
